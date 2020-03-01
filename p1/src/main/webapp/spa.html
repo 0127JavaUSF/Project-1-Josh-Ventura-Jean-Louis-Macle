@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+    <a href="./index.html">Menu</a>
+<br/>
+<h2>Make a table based on JSON data.</h2>
+
+<p id="demo"></p>
+
+<script>
+var obj, dbParam, xmlhttp, myObj, x, txt = "";
+
+//dbParam = JSON.stringify(obj);
+xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    myObj = JSON.parse(this.responseText);
+    //get the value for key "EMPLOYEE"
+    let data = myObj["EMPLOYEE"];
+    let data_pending = data[0];
+    let data_approved = data[1];
+    let data_denied = data[2];
+    txt += "<strong> Pending expenses </strong>";
+    txt += "<table border='1'>";
+    txt += "<thead><tr><th>Description</th><th>Amount</th><th>Type</th><th>Data submitted</th></tr></thead><tbody>";
+    for (x in data_pending) {
+      txt += "<tr> <td>" + data_pending[x].reimbursementDescription + "</td> <td>" + data_pending[x].reimbursementAmount + "</td><td>" + data_pending[x].reimbursementType + "</td><td>" + data_pending[x].reimbursementSubmitted + "</td></tr>";
+    }
+    txt += "</tbody></table>" ;
+    txt += "<br/>" ;
+  txt += "<strong> Expenses approved </strong>";
+  txt += "<table border='1'>";
+ 	txt += "<thead><tr><th>Description</th><th>Amount</th><th>Type</th><th>Data submitted</th></tr></thead><tbody>";    
+    for (x in data_approved) {
+         txt += "<tr> <td>" + data_approved[x].reimbursementDescription + "</td> <td>" + data_approved[x].reimbursementAmount + "</td><td>" + data_approved[x].reimbursementType+ "</td><td>" + data_approved[x].reimbursementSubmitted + "</td></tr>";
+    }
+    txt += "</table>";
+  txt += "<br/>" ;
+    txt += "<strong> Expenses denied </strong>";
+    txt += "<table border='1'>";
+   	txt += "<thead><tr><th>Description</th><th>Amount</th><th>Type</th><th>Data submitted</th></tr></thead><tbody>";	
+	for (x in data_denied) {
+	    txt += "<tr> <td>" + data_denied[x].reimbursementDescription + "</td> <td>" + data_denied[x].reimbursementAmount + "</td><td>" + data_denied[x].reimbursementType+ "</td><td>" + data_denied[x].reimbursementSubmitted + "</td></tr>";
+	}
+	txt += "</tbody></table>";
+    document.getElementById("demo").innerHTML = txt;
+  }
+};
+xmlhttp.open("POST", "/p1/spaServlet/", true); 
+xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xmlhttp.send("userId=" + 12);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Login with SPA feature</title>
+</head>
+<body>
+
+<a href="./index.html">Menu</a>
+<br/>
+
+<script>
+function validateCredentials(){
+	xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() {
+	  if (this.readyState == 4 && this.status == 200) {
+		  //document.getElementById("employee").innerHTML = this.responseText;
+          document.getElementById("employee").innerHTML = "Text from the function";
+		  
+	  }
+
+
+xmlhttp.open("POST", "/servletLogin/", true); //no POST parameter is passed in this request;
+xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xmlhttp.send("username="+"jl1"+"&"+"password="+"pwd1");
+
+    }
+}
+</script>
+
+<div id="login">
+        <form id="loginForm"> 
+            <p id="loginHeader">
+                Login
+            </p>
+            <input id="loginUsername" type=text placeholder="jl1" name="username">
+            <input id="loginPassword" type="password" placeholder="pwd1" name="password">
+            <input type="submit" onclick="validateCredentials()" value="Submit"></input>
+            <!--  <button id="loginButton" onclick="hideLogin()" type="button">Login</button> -->
+        </form>
+ </div> 
+ 
+ <div id="employee">
+ 	Text to be modified.
+ 
+ </div>
+ 
+</body>
+</html>

@@ -1,0 +1,103 @@
+body, html {
+    padding: 0;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    min-height: 100vh;
+}
+
+/* Login page style */
+#login{
+    height: 600px;
+    width: 75%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+#loginForm {
+    border: 4px solid #d8d5d5;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+#loginUsername, #loginPassword  {
+    width: 50%;
+    padding: 12px 20px;
+    margin: 7px;
+    border: 1px solid #ccc;
+
+}
+#usernameInput{
+    display: flex;
+    flex-direction: column;
+}
+#passwordInput{
+    display: flex;
+    flex-direction: column;
+}
+
+#loginButton {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 200px;
+    margin-top: 10px;
+    font-size: 1rem;
+}
+#loginHeader{
+    text-align: center;
+    font-size: 2rem;
+    
+}
+#loginButton{
+    border-radius: 5px;
+}
+
+/* Employee page style*/
+#employeeNavBar{
+    
+    display: none;
+    
+}
+
+#addReinbursments{
+    display: none;
+    margin-top: 50px;
+}
+
+#addReimButton{
+	text-align: right;
+}
+
+#employeeViewTickets{
+    display: none;
+    margin-top: 50px;
+}
+
+/* Supervisor page style*/
+
+#supervisorNavBar{
+    display: none;
+}
+
+#supervisorTable{
+    display: none;
+    margin-top: 50px;
+}
+#approveDenyButtons{
+    text-align: right;
+}
+
+table th {
+    text-align: left;
+    background-color: lightblue;
+    
+}
+table td {
+    border: 1px solid black;
+    padding: 4px;
+}
