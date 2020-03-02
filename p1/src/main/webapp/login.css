@@ -101,3 +101,8 @@ table td {
     border: 1px solid black;
     padding: 4px;
 }
+
+.tableData {
+	background-color: rgb(0, 255, 255) !important;
+	
+}

@@ -2,7 +2,6 @@ package com.revature.servlets;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,7 +15,6 @@ import org.apache.tomcat.util.http.fileupload.FileItem;
 import org.apache.tomcat.util.http.fileupload.FileItemIterator;
 import org.apache.tomcat.util.http.fileupload.FileItemStream;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
-import org.apache.commons.io.FileUtils;
 import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
@@ -48,41 +46,29 @@ public class ServletFileStorage extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
+		
 		ReimbursementDAO rdao = new ReimbursementDAO();
-		
-		for (String key :request.getParameterMap().keySet()) System.out.println(request.getParameterMap().get(key));
-		
+		//ASSUMPTION: the file is a jpg file
+		String fileId = request.getParameter("userId")+"_"+request.getParameter("reimbId")+".jpg";
+		response.getWriter().append(LocalDateTime.now()+"\n");
+		response.getWriter().append("File Id is:"+fileId+"\n");
+		response.getWriter().append(request.getParameter("file")+"\n");
 		//http://commons.apache.org/proper/commons-fileupload/using.html
 		// Check that we have a file upload request
+		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 		ServletFileUpload fileUpload = new ServletFileUpload();
-		//Iterator on the items uploaded		
+		//Iterator on the items uploaded
+		
 		FileItemIterator items;
 		try {
 			items = fileUpload.getItemIterator(request);
 			// iterate items
-			String uploadFolder ="C:/_Revature/Projects/Project1/p1/src/main/resources/receipts_upload/";
-			String fieldName = "";
-			String userId = "";
-			String reimbId = "";
+			String uploadFolder = System.getProperty("user.dir")+"/src/main/resources/receipts_upload/";
 		    while (items.hasNext()) {
-		    	System.out.println("1 element found in items.");		    	
-		    	FileItemStream itemStream = items.next();
-		    	fieldName = itemStream.getFieldName();		    	
-		    	System.out.println("Field name: "+fieldName);
-		    	switch (fieldName) {
-		    	case "userId": userId = fieldName; break;
-		    	case "reimbId": 
-		    		reimbId = fieldName;  
-		    		String name = itemStream.getName();
-		    		System.out.println("name:"+name);
-		    		break;
-		    	case "file": 
-		    		 InputStream is = itemStream.openStream();
-		    		 String file_Path = uploadFolder+userId+"_"+reimbId+".jpg";
-		    		 System.out.println(file_Path);
-				     FileUtils.copyInputStreamToFile(is, new File(uploadFolder,"file_stored.jpg"));
-				     break;		    	
-		    	}		      
+		    	System.out.println("1 element found in items.");
+		        FileItem item = (FileItem)items.next();
+		        item.write(new File(uploadFolder,"uploaded.jpg"));
 		    }
 			
 		} catch (FileUploadException e) {
@@ -94,6 +80,24 @@ public class ServletFileStorage extends HttpServlet {
 		}
 		    
 		
+		
+	    
+	    /*
+	    List fileItems = upload.parseRequest(req);
+	    // assume we know there are two files. The first file is a small
+	    // text file, the second is unknown and is written to a file on
+	    // the server
+	    Iterator i = fileItems.iterator();
+	    String comment = ((FileItem)i.next()).getString();
+	    FileItem fi = (FileItem)i.next();
+	    // file name on the client
+	    String fileName = fi.getName();
+	    // save comment and file name to database
+	    ...
+	    // write the file
+	    fi.write(new File("/www/uploads/", fileName));
+		*/
+		//rdao.setReceipt(fileId);
 	}
 
 }

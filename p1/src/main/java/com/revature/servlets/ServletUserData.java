@@ -103,6 +103,7 @@ public class ServletUserData extends HttpServlet {
 			  		  
 			  ObjectMapper om = new ObjectMapper(); 
 			  om.writeValue(response.getWriter(), allReimbursementByTypes); 
+			  
 		  } else {
 			  HashMap<Integer, ArrayList<ArrayList<Reimbursement>>> data = rdao.getAllUsersAllReimbursements();
 			  

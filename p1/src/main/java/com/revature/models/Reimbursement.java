@@ -17,7 +17,12 @@ public class Reimbursement {
 	private String  reimbursementResolved;	
 	private String reimbursementStatus;
 	private String reimbursementType;
-	
+
+
+	public Reimbursement() {
+		super();
+	}
+
 	public Reimbursement(int userId, int reimbursementId, Double reimbursementAmount, Timestamp reimbursementSubmitted, String reimbursementDescription, int reimbursementAuthor,  String reimbursementStatus, String reimbursementType) {
 		super();
 		this.setUserId(userId);

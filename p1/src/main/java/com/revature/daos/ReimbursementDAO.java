@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.amazonaws.SDKGlobalConfiguration;
 import com.amazonaws.auth.AWSCredentials;
@@ -200,25 +202,58 @@ public class ReimbursementDAO {
 	  }
 	  	  
 	 /* Changing reimbursement status */ 
-	  public int changeReimbursementStatus(int reimb_id, int resolver_id, String status) {
+	  public List<Reimbursement> changeReimbursementStatus(String[] reimb_id, int resolver_id, String status) {
 		  int returnCode = -1;
 		  try { 
 			  Connection connection = ConnectionUtil.getConnection(); 
 			  if (connection ==  null) throw new NullConnectionException(); 
-			  String sql =  "UPDATE ERS_REIMBURSEMENT SET REIMB_RESOLVED=CURRENT_TIMESTAMP, REIMB_STATUS_ID=(SELECT ERS_REIMBURSEMENT_STATUS.reimb_status_id FROM ERS_REIMBURSEMENT_STATUS WHERE ERS_REIMBURSEMENT_STATUS.reimb_status=? ), REIMB_RESOLVER=?  WHERE reimb_id =?;"; 
+			  String sql =  "UPDATE ERS_REIMBURSEMENT SET REIMB_RESOLVED=CURRENT_TIMESTAMP, REIMB_STATUS_ID=(SELECT ERS_REIMBURSEMENT_STATUS.reimb_status_id FROM ERS_REIMBURSEMENT_STATUS WHERE ERS_REIMBURSEMENT_STATUS.reimb_status=? ), REIMB_RESOLVER=?  WHERE reimb_id IN (";
+			  
+			  int i = 0;
+			  for(String s : reimb_id) {
+				  
+				  if(i == 0) sql += "?";
+				  else sql += ", ?";
+				  
+				  i++;
+			  }
+			  
+			  sql += ") RETURNING *;";
+			  
+			  
 			  PreparedStatement statement = connection.prepareStatement(sql);
 			  statement.setString(1,status); 
-			  statement.setInt(2,resolver_id); 
-			  statement.setInt(3,reimb_id); 
+			  statement.setInt(2,resolver_id);
+			  
+			  int j = 3;
+			  for(String s : reimb_id) {
+				  
+				  statement.setInt(j, Integer.parseInt(s));
+				  j++;
+			  }
 				 
-			  returnCode = statement.executeUpdate(); 
+			  ResultSet result = statement.executeQuery(); 
 			   
-			  statement.close(); connection.close(); return returnCode; }
+			  List<Reimbursement> list = new LinkedList<Reimbursement>();
+			  
+			  while(result.next()) {
+				  
+				  Reimbursement reimbursement = new Reimbursement();
+				  reimbursement.setReimbursementId(result.getInt("reimb_id"));
+				  reimbursement.setReimbursementResolved(result.getString("reimb_resolved"));
+				  reimbursement.setReimbursementStatus(result.getString("reimb_status_id"));
+				  
+				  list.add(reimbursement);
+			  }
+			  
+			  statement.close(); connection.close(); 
+			  return list;
+			  }
 	  
 		  catch(SQLException e) { e.printStackTrace(); } 
 		  catch(NullConnectionException  e) { System.err.println("ConnectionUtil.getConnection() returned null;"); }
 		  
-		  return returnCode;
+		  return null;
 	  	}
 		  	  
 	

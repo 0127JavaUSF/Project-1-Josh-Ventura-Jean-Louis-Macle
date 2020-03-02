@@ -111,11 +111,11 @@ public class ReimbursementDAOTest {
 		  
 	  }
 	  
-	  @Test
-	  public void changeReimbursementStatusTest() {
-		  int status = dao.changeReimbursementStatus(25, 8, "Denied");
-		  assertTrue(status != 0);
-	  }
+//	  @Test
+//	  public void changeReimbursementStatusTest() {
+//		  int status = dao.changeReimbursementStatus(25, 8, "Denied");
+//		  assertTrue(status != 0);
+//	  }
 	  
 	  
 	   //@Test 
